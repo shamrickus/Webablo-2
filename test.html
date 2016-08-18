@@ -1,0 +1,120 @@
+<head>
+	<title>Test</title>
+	<script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
+
+	<script>
+    var step = 0;
+    var tileGraphics = [];
+    var ctx;
+
+    var Class = {
+
+    };
+
+    function loadImg() {
+      console.log("Building")
+      var baseDir = "sprites_extracted/Paladin/";
+      var tileGraphicsToLoad = [];
+
+      // Images to be loaded and used.
+      // Tutorial Note: As water is loaded first it will be represented by a 0 on the map and land will be a 1.
+      for(var i = 0; i < 16; ++i){
+        let direction = "";
+        switch(i){
+          case 0:
+            direction = "S"
+            break;
+          case 1:
+            direction = "SSW";
+            break;
+          case 2:
+            direction = "SW";
+            break;
+          case 3:
+            direction = "WSW";
+            break;
+          case 4:
+            direction = "W";
+            break;
+          case 5:
+            direction = "WNW";
+            break;
+          case 6:
+            direction = "NW";
+            break;
+          case 7:
+            direction = "NNW";
+            break;
+          case 8:
+            direction = "N";
+            break;
+          case 9:
+            direction = "NNE";
+            break;
+          case 10:
+            direction = "NE";
+            break;
+          case 11:
+            direction = "ENE";
+            break;
+          case 12:
+            direction = "E";
+            break;
+          case 13:
+            direction = "ESE";
+            break;
+          case 14:
+            direction = "SE";
+            break;
+          case 15:
+            direction = "SSE";
+            break;
+        }
+        for (var j = 0; j < 16; ++j){
+          tileGraphicsToLoad.push(baseDir + "Paladin-" + j + "-" + direction + ".png");
+        }
+      }
+     console.log("Begin load...");
+      tileGraphicsLoaded = 0;
+      for (var i = 0; i < tileGraphicsToLoad.length; i++) {
+        tileGraphics[i] = new Image();
+        tileGraphics[i].src = tileGraphicsToLoad[i];
+        tileGraphics[i].onload = function() {
+          // Once the image is loaded increment the loaded graphics count and check if all images are ready.
+          tileGraphicsLoaded++;
+          if (tileGraphicsLoaded === tileGraphicsToLoad.length) {
+              console.log("Done loading");
+              setInterval(function(){
+                drawMap();
+              }, 62.5);
+          }
+        }
+      }
+    }
+
+
+  function drawMap() {
+    ctx = document.getElementById('mainCanvas').getContext('2d');
+    // create the canvas context
+    ctx.clearRect(0,0,500,500);
+
+    ctx.drawImage(tileGraphics[step],0,0);    
+    step+=1;
+    if(step > 255) step = 0;
+  }
+
+  function init() {
+    // Remove Event Listener and load images.
+    window.removeEventListener('load', init);
+    loadImg();
+  };
+  // Add Event Listener to dectect when page has fully loaded.
+  window.addEventListener('load', init, false);
+	</script>
+</head>
+
+<body>
+	<canvas stlye="border:1px solid black;" id="mainCanvas"></canvas>
+</body>
+
+
