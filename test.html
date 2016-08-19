@@ -3,73 +3,52 @@
 	<script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
 
 	<script>
+    var Point = {
+      x: 0,
+      y: 0
+    }
+
+    function angleMap(angle){
+      if(angle > 360 || angle < 0) angle = angle % 360;
+      return directionMapping[(angle / (360 / 16))]
+    }
+
+    var directionMapping = {
+      0: "S",
+      1: "SSW",
+      2: "SW",
+      3: "WSW",
+      4: "W",
+      5: "WNW",
+      6: "NW",
+      7: "NNW",
+      8: "N",
+      9: "NNE",
+      10: "NE",
+      11: "ENE",
+      12: "E",
+      13: "ESE",
+      14: "SE",
+      15: "SSE"
+    };
+
     var step = 0;
+    var baseStep = 0;
     var tileGraphics = [];
     var ctx;
-
-    var Class = {
-
-    };
+    var mousePos = {x:0, y:-1.05};
+    var origin = {x:0, y:0};
+    var axis = {x: 0, y:-1};
+    var curDir = "S";
+    const pi = 3.14159;
 
     function loadImg() {
       console.log("Building")
       var baseDir = "sprites_extracted/Paladin/";
       var tileGraphicsToLoad = [];
 
-      // Images to be loaded and used.
-      // Tutorial Note: As water is loaded first it will be represented by a 0 on the map and land will be a 1.
       for(var i = 0; i < 16; ++i){
-        let direction = "";
-        switch(i){
-          case 0:
-            direction = "S"
-            break;
-          case 1:
-            direction = "SSW";
-            break;
-          case 2:
-            direction = "SW";
-            break;
-          case 3:
-            direction = "WSW";
-            break;
-          case 4:
-            direction = "W";
-            break;
-          case 5:
-            direction = "WNW";
-            break;
-          case 6:
-            direction = "NW";
-            break;
-          case 7:
-            direction = "NNW";
-            break;
-          case 8:
-            direction = "N";
-            break;
-          case 9:
-            direction = "NNE";
-            break;
-          case 10:
-            direction = "NE";
-            break;
-          case 11:
-            direction = "ENE";
-            break;
-          case 12:
-            direction = "E";
-            break;
-          case 13:
-            direction = "ESE";
-            break;
-          case 14:
-            direction = "SE";
-            break;
-          case 15:
-            direction = "SSE";
-            break;
-        }
+        let direction = directionMapping[i];
         for (var j = 0; j < 16; ++j){
           tileGraphicsToLoad.push(baseDir + "Paladin-" + j + "-" + direction + ".png");
         }
@@ -98,14 +77,43 @@
     // create the canvas context
     ctx.clearRect(0,0,500,500);
 
+    var dir = calculateDirection(mousePos, origin, axis);
     ctx.drawImage(tileGraphics[step],0,0);    
-    step+=1;
-    if(step > 255) step = 0;
+    console.log(dir, curDir);
+    if(dir != curDir){
+    }
+    else{
+      step+=1;
+      if(step > baseStep + 15){
+        step = baseStep;
+      }
+    }
+  }
+
+  function calculateDirection(p1, p2, p3){
+    angle = find_angle(p1, p2, p3);
+    return(angleMap(angle));
+  }
+
+  function find_angle(A,B,C) {
+    var AB = Math.sqrt(Math.pow(B.x-A.x,2)+ Math.pow(B.y-A.y,2));    
+    var BC = Math.sqrt(Math.pow(B.x-C.x,2)+ Math.pow(B.y-C.y,2)); 
+    var AC = Math.sqrt(Math.pow(C.x-A.x,2)+ Math.pow(C.y-A.y,2));
+    return Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB)) * (180/pi);
+}
+
+  function getClickPosition(e){
+    mousePos.x = e.clientX;
+    mouesPos.y = e.clientY;
+
+    
   }
 
   function init() {
     // Remove Event Listener and load images.
     window.removeEventListener('load', init);
+    window.addEventListener("click", getClickPosition, false);
+
     loadImg();
   };
   // Add Event Listener to dectect when page has fully loaded.
