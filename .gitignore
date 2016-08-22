@@ -1,3 +1,6 @@
 sprite_raw/*
 sprites_extracted/*
 __pycache__/*
+scripts/*.js
+style/*.css
+node_modules/*

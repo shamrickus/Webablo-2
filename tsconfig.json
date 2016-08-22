@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "watch": true,
+        "sourceMap": true,
+        "pretty": true,
+        "listFiles": true,
+        "diagnostics": true
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "webablo2",
+  "version": "1.0.0",
+  "description": "Diablo 2 \"port\" to web",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shamrickus/Webablo-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shamrickus/Webablo-2/issues"
+  },
+  "homepage": "https://github.com/shamrickus/Webablo-2#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^2.13.6",
+    "gulp-sass": "^2.3.2"
+  }
+}
