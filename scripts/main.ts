@@ -1,19 +1,17 @@
-let Point = {
-  x: 0,
-  y: 0
-}
+import directionMapping = utilities.directionMapping;
+import calculateDirection = utilities.calculateDirection;
+import Point = utilities.Point;
 
 let step = 0;
 let baseStep = 0;
 let tileGraphics = [];
 let ctx;
-let mousePos = {x:0, y:1};
-let origin = {x:0, y:0};
-let axis = {x: 0, y:1};
+let mousePos = <Point>{x:0, y:1};
+let origin = <Point>{x:0, y:0};
+let axis = <Point>{x: 0, y:1};
 let curDir = "S";
-const PI = 3.14159;
 
-function loadImg() {
+function loadImg(): void{
   console.log("Building")
   let baseDir = "sprites_extracted/Paladin/";
   let tileGraphicsToLoad = [];
@@ -42,7 +40,7 @@ function loadImg() {
   }
 }
 
-function drawMap() {
+function drawMap(): void {
   ctx = document.getElementById('mainCanvas')['getContext']('2d');
   // create the canvas context
   ctx.clearRect(0,0,500,500);
@@ -61,12 +59,12 @@ function drawMap() {
 }
 
 
-function getClickPosition(e){
+function getClickPosition(e: any): void{
   mousePos.x = e.clientX;
   mousePos.y = e.clientY;
 }
 
-function init() {
+function init(): void{
   // Remove Event Listener and load images.
   window.removeEventListener('load', init);
   window.addEventListener("click", getClickPosition, false);
