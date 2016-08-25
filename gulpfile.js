@@ -1,9 +1,11 @@
 var gulp = require("gulp");
 var gulp_tsc = require("gulp-typescript");
 var gulp_sass = require('gulp-sass');
+var gulp_watch = require('gulp-watch');
 
 var scriptDir = "scripts/";
 var styleDir = "styles/";
+var testDir = "tests/";
 
 gulp.task('sass', sass);
 function sass(){

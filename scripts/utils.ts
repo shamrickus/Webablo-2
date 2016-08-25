@@ -1,5 +1,5 @@
-namespace utilities{
-  const PI = <number>3.14159;
+namespace main.utilities{
+  import debug = main.debug;
 
   export class Point{
    x: number;
@@ -9,6 +9,42 @@ namespace utilities{
      this.x = 0;
      this.y = 0;
    } 
+  }
+
+  export class Vector{
+    i: number;
+    j: number;
+
+    constructor(){
+      this.i = 0;
+      this.j = 0;
+    }
+  }
+
+  export function magnitude(vec: Vector): number{
+    return Math.sqrt(dot(vec, vec));
+  }
+
+  export function dot(vec: Vector, other: Vector): number{
+     return vec.i * other.i + vec.j * other.j;
+  }
+
+  export function multiple(vec: Vector, num: number): Vector{
+    vec.i *= num;
+    vec.j *= num;
+
+    return vec;
+  }
+
+  export function divide(vec: Vector, num: number): Vector{
+    vec.i = vec.i/num;
+    vec.j = vec.j/num;
+
+    return vec;
+  }
+
+  export function normalize(vec: Vector): Vector{
+    return divide(vec, magnitude(vec));
   }
 
   export const directionMapping = {
@@ -30,28 +66,47 @@ namespace utilities{
     15:  "SSE"
   }
 
-  export function calculateDirection(p1: Point, p2: Point, p3: Point): string{
-    let angle = find_angle(p1, p2, p3);
+  export function calculateDirection(A: Point, B: Point, C: Point): string{
+    let direction = <Vector>{
+      i: A.x - B.x,
+      j: A.y - B.y
+    };
+    //direction = normalize(direction);
+    let south = <Vector>{
+      i: C.x - B.x,
+      j: C.y - B.y
+    };
+    //south = normalize(south);
+
+    let angle = findAngle(direction, south);
+
+    if(debug){
+      document.getElementById("angle").innerHTML = "Angle: " + angle as string;
+      document.getElementById("vector").innerHTML = "I: " + direction.i + ", J: " + direction.j;
+    }
+
     return (angleMap(angle));
   }
 
   //BA and BC
-  function find_angle(A: Point,B: Point,C: Point): number {
-    console.log(A, B, C);
+  function findAngle(v1: Vector, v2: Vector): number {
+    var radians = Math.acos(dot(v1, v2) / (magnitude(v1) * magnitude(v2)));
+    var degrees = radians * 180/Math.PI;
 
-    var m1 = (B.y - A.y) / (B.x - A.x);
-    var m2 = (B.y - C.y) / (B.x - C.x);
-
-    //tan^-1((m1-m2)/(1+m1*m2))
-    var radians = Math.atan((m1 - m2) / (1 + m1*m2));
-    var degrees = radians * 180/PI;
-
+    if(v1.i > 0){
+      if(v1.j > 0){
+        degrees = 360 - degrees;
+      }
+      else{
+        degrees = 180 - degrees + 180;
+      }
+    }
     return degrees;
   }
 
   function angleMap(angle: number): string{
     if(angle > 360 || angle < 0) angle = angle % 360;
-    return directionMapping[Math.floor((angle / (360 / 16)))]
+    return directionMapping[Math.round((angle / (360 / 16)))]
   }
 }
 

@@ -2,6 +2,6 @@ sprite_raw/*
 sprites_extracted/*
 __pycache__/*
 scripts/*.js
-*.js.map
+scripts/*.js.map
 style/*.css
 node_modules/*
