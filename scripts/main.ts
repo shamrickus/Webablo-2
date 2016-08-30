@@ -19,8 +19,17 @@ export var origin = <Point>{x:0, y:0};
 export var axis = <Point>{x: 0, y:1};
 export var curDir: string = "S";
 export var mouseUpdate: boolean = false;
+export var map: any[];
 
-export var debug = false;
+export var debug = true;
+
+function debugMap(): void{
+  for(var i = 0; i < 100; ++i){
+    for(var j = 0; j < 100; ++j){
+      map[i][j] = 0;
+    }
+  }
+}
 
 function loadImg(): void{
   console.log("Building")
