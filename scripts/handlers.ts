@@ -3,17 +3,22 @@ import mousePos = main.mousePos;
 import yOffset = main.yOffset;
 import xOffset = main.xOffset;
 import Point = main.utilities.Point;
+import debug = main.debug;
 
 namespace main.eventHandlers{
 	let mouseDown: boolean = false;
 	let mouseTimeout: any;
-	let keyMaps: any;
+	let keyMaps: KeyMap = <KeyMap>{ };
 
 	interface Key{
 		keyCode: number;
 		key: string;
 		pressed: boolean;
 		pressKeyCode?: number;
+	}
+
+	interface KeyMap{
+		string: Key;
 	}
 
 	function getClickPosition(e: any): void{
@@ -52,15 +57,19 @@ namespace main.eventHandlers{
 	}
 
 	function keydown(e: any): void{
-		keyMaps[e.char] = <Key>{keyCode: e.keyCode, key: e.char, pressed: true};
+		keyMaps[e.key] = <Key>{keyCode: e.keyCode, key: e.key, pressed: true};
+
+		if(e.key == "d" || e.key == "D"){
+			debug = !debug;
+		}
 	}
 
 	function keyup(e: any): void{
-		if(e.char in keyMaps){
-			keyMaps[e.char] = false;
+		if(keyMaps[e.key] !== undefined){
+			keyMaps[e.key].pressed = false;
 		}
 		else{
-			keyMaps[e.char] = <Key>{keyCode: e.keyCode, key: e.char, pressed: false};
+			keyMaps[e.key] = <Key>{keyCode: e.keyCode, key: e.key, pressed: false};
 		}
 	}
 

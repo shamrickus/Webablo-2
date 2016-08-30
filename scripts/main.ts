@@ -7,6 +7,9 @@ import multiple = main.utilities.multiple;
 import normalize = main.utilities.normalize;
 import directionMapping = main.utilities.directionMapping;
 import calculateDirection = main.utilities.calculateDirection;
+import tileWidth = main.tile.tileWidth;
+import tileHeight = main.tile.tileHeight;
+import Tile = main.tile.Tile;
 
 export var step: number = 0;
 export var baseStep: number = 0;
@@ -19,17 +22,9 @@ export var origin = <Point>{x:0, y:0};
 export var axis = <Point>{x: 0, y:1};
 export var curDir: string = "S";
 export var mouseUpdate: boolean = false;
-export var map: any[];
+export var map: Tile[] = [];
 
-export var debug = true;
-
-function debugMap(): void{
-  for(var i = 0; i < 100; ++i){
-    for(var j = 0; j < 100; ++j){
-      map[i][j] = 0;
-    }
-  }
-}
+export var debug = false;
 
 function loadImg(): void{
   console.log("Building")
@@ -48,22 +43,29 @@ function loadImg(): void{
     tileGraphics[i] = new Image();
     tileGraphics[i].src = tileGraphicsToLoad[i];
     tileGraphics[i].onload = function() {
-      // Once the image is loaded increment the loaded graphics count and check if all images are ready.
       tileGraphicsLoaded++;
       if (tileGraphicsLoaded === tileGraphicsToLoad.length) {
-          console.log("Done loading");
+          var img = new Image();
+          img.src = "sprites_extracted/grass.png";
+          img.onload = function(){
+              map.push(new Tile(img));
+              console.log("Done loading");
 
-          xOffset = ctxWidth / 2;
-          yOffset = ctxHeight / 2;
-          
-          translate();
+              xOffset = ctxWidth / 2;
+              yOffset = ctxHeight / 2;
+              
+              translate();
 
-          setInterval(function(){
-            drawMap();
-          }, 62.5);
+              setInterval(function(){
+                drawMap();
+              }, 62.5);
+          }
+
       }
     }
   }
+
+
 }
 
 function translate(){
@@ -95,6 +97,18 @@ function drawMap(): void {
 
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, ctxWidth, ctxHeight);
+
+
+  for(var i = -1; i <= ctxWidth / tileWidth; ++i){
+    ctx.save();
+    for(var j = -1; j <= ctxHeight / tileHeight; ++j){
+      ctx.drawImage(map[0].img, i * tileWidth, j * tileHeight);
+      ctx.drawImage(map[0].img, i * tileWidth + tileWidth / 2, j * tileHeight + tileHeight / 2)
+    }
+    ctx.restore();
+  }
+
+
   translate();
 
   ctx.translate(-(tileGraphics[0].width / 2), -(tileGraphics[0].height / 2));
